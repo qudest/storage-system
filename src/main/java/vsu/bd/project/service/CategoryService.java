@@ -24,9 +24,9 @@ public class CategoryService {
         this.repository = repository;
     }
 
-    public Page<CategoryDto> findAll(int page, int size) {
+    public Page<CategoryDto> findAll(int page, int size, String searchValue, String searchColumn) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
-        return repository.findAll(pageable).map(mapper::toDto);
+        return repository.findAllWithFilters(searchValue, searchColumn, pageable).map(mapper::toDto);
     }
 
     public List<CategoryDto> findAll() {

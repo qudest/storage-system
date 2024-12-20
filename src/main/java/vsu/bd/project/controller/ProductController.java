@@ -27,12 +27,16 @@ public class ProductController {
     @GetMapping({"", "/"})
     public String showAllProducts(Model model,
                                   @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "20") int size) {
-        Page<ProductDto> productPage = productService.findAll(page, size);
+                                  @RequestParam(defaultValue = "20") int size,
+                                  @RequestParam(required = false) String searchValue,
+                                  @RequestParam(required = false) String searchColumn) {
+        Page<ProductDto> productPage = productService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("totalItems", productPage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "products/index";
     }
 

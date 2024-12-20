@@ -23,12 +23,17 @@ public class OperationController {
     @GetMapping({"", "/"})
     public String showAllOperations(Model model,
                                     @RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "20") int size) {
-        Page<OperationDto> operationPage = operationService.findAll(page, size);
+                                    @RequestParam(defaultValue = "20") int size,
+                                    @RequestParam(required = false) String searchValue,
+                                    @RequestParam(required = false) String searchColumn) {
+        Page<OperationDto> operationPage = operationService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("operations", operationPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", operationPage.getTotalPages());
         model.addAttribute("totalItems", operationPage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "operations/index";
     }
+
 }

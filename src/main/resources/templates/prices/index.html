@@ -23,6 +23,23 @@
 
     <p>Total items: <span th:text="${totalItems}"></span></p>
 
+    <form method="get" action="/prices" class="mb-3">
+        <div class="row">
+            <div class="col">
+                <select class="form-control" name="searchColumn">
+                    <option value="type" th:selected="${searchColumn == 'type'}">Type</option>
+                    <option value="value" th:selected="${searchColumn == 'value'}">Value</option>
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" name="searchValue" placeholder="Search" th:value="${searchValue}">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+
     <table class="table">
         <thead>
         <tr>

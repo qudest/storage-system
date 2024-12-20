@@ -22,12 +22,16 @@ public class PriceController {
     @GetMapping({"", "/"})
     public String showAllPrices(Model model,
                                 @RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "20") int size) {
-        Page<PriceDto> pricePage = priceService.findAll(page, size);
+                                @RequestParam(defaultValue = "20") int size,
+                                @RequestParam(required = false) String searchValue,
+                                @RequestParam(required = false) String searchColumn) {
+        Page<PriceDto> pricePage = priceService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("prices", pricePage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pricePage.getTotalPages());
         model.addAttribute("totalItems", pricePage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "prices/index";
     }
 

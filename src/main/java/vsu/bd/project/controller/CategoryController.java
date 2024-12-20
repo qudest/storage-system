@@ -23,12 +23,16 @@ public class CategoryController {
     @GetMapping({"", "/"})
     public String showAllCategories(Model model,
                                     @RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "20") int size) {
-        Page<CategoryDto> categoryPage = categoryService.findAll(page, size);
+                                    @RequestParam(defaultValue = "20") int size,
+                                    @RequestParam(required = false) String searchValue,
+                                    @RequestParam(required = false) String searchColumn) {
+        Page<CategoryDto> categoryPage = categoryService.findAll(page, size, searchValue, searchColumn);
         model.addAttribute("categories", categoryPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", categoryPage.getTotalPages());
         model.addAttribute("totalItems", categoryPage.getTotalElements());
+        model.addAttribute("searchValue", searchValue);
+        model.addAttribute("searchColumn", searchColumn);
         return "categories/index";
     }
 
