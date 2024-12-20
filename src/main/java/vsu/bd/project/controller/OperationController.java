@@ -1,10 +1,13 @@
 package vsu.bd.project.controller;
 
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import vsu.bd.project.dto.OperationDto;
 import vsu.bd.project.service.OperationService;
 
 @Controller
@@ -18,8 +21,14 @@ public class OperationController {
     }
 
     @GetMapping({"", "/"})
-    public String showAllOperations(Model model) {
-        model.addAttribute("operations", operationService.findAll());
+    public String showAllOperations(Model model,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "20") int size) {
+        Page<OperationDto> operationPage = operationService.findAll(page, size);
+        model.addAttribute("operations", operationPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", operationPage.getTotalPages());
+        model.addAttribute("totalItems", operationPage.getTotalElements());
         return "operations/index";
     }
 }

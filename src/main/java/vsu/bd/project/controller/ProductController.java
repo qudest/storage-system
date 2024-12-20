@@ -1,6 +1,7 @@
 package vsu.bd.project.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +25,14 @@ public class ProductController {
     }
 
     @GetMapping({"", "/"})
-    public String showAllProducts(Model model) {
-        model.addAttribute("products", productService.findAll());
+    public String showAllProducts(Model model,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "20") int size) {
+        Page<ProductDto> productPage = productService.findAll(page, size);
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("totalItems", productPage.getTotalElements());
         return "products/index";
     }
 

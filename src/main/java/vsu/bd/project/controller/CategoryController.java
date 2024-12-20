@@ -1,6 +1,7 @@
 package vsu.bd.project.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,8 +21,14 @@ public class CategoryController {
     }
 
     @GetMapping({"", "/"})
-    public String showAllCategories(Model model) {
-        model.addAttribute("categories", categoryService.findAll());
+    public String showAllCategories(Model model,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "20") int size) {
+        Page<CategoryDto> categoryPage = categoryService.findAll(page, size);
+        model.addAttribute("categories", categoryPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", categoryPage.getTotalPages());
+        model.addAttribute("totalItems", categoryPage.getTotalElements());
         return "categories/index";
     }
 
